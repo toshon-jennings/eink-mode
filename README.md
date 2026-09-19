@@ -1,5 +1,9 @@
 # E-Ink Mode for macOS
 
+<p align="center">
+  <img src="assets/og_image.png" alt="E-Ink Mode for macOS" width="100%" />
+</p>
+
 A small Swift CLI that requests a lighter, grayscale, lower-motion macOS appearance and a plain paper background. It approximates an e-ink workflow; it does not alter the display hardware. `on` records the current settings and `off` attempts to restore them. This is a prototype, not a guarantee of complete restoration in every failure case.
 
 ---
