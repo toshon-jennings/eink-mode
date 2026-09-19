@@ -349,10 +349,62 @@ final class EinkCLI {
     private let stateMgr = StateManager.shared
     private let wallpapers = WallpaperManager.shared
 
-    private func paperURL(forDarkMode isDark: Bool = false) -> URL {
+    private func ensurePaperImage(isDark: Bool) -> URL {
         let filename = isDark ? "eink_dark_paper.png" : "eink_paper.png"
-        return FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("eink-mode/assets/\(filename)")
+        let home = FileManager.default.homeDirectoryForCurrentUser
+        let localRepoURL = home.appendingPathComponent("eink-mode/assets/\(filename)")
+        if FileManager.default.fileExists(atPath: localRepoURL.path) {
+            return localRepoURL
+        }
+
+        if let exePath = Bundle.main.executableURL {
+            let shareURL = exePath.deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("share/eink/\(filename)")
+            if FileManager.default.fileExists(atPath: shareURL.path) {
+                return shareURL
+            }
+            let shareAssetsURL = exePath.deletingLastPathComponent().deletingLastPathComponent().appendingPathComponent("share/eink/assets/\(filename)")
+            if FileManager.default.fileExists(atPath: shareAssetsURL.path) {
+                return shareAssetsURL
+            }
+        }
+
+        let configDir = home.appendingPathComponent(".config/eink-mode", isDirectory: true)
+        let configURL = configDir.appendingPathComponent(filename)
+        if FileManager.default.fileExists(atPath: configURL.path) {
+            return configURL
+        }
+
+        try? FileManager.default.createDirectory(at: configDir, withIntermediateDirectories: true)
+        generatePaperAsset(outputPath: configURL.path, isDark: isDark)
+        return configURL
+    }
+
+    private func generatePaperAsset(outputPath: String, isDark: Bool, width: Int = 3840, height: Int = 2400) {
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        guard let context = CGContext(
+            data: nil,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: width * 4,
+            space: colorSpace,
+            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+        ) else { return }
+
+        if isDark {
+            context.setFillColor(red: 26.0 / 255.0, green: 26.0 / 255.0, blue: 26.0 / 255.0, alpha: 1.0)
+        } else {
+            context.setFillColor(red: 235.0 / 255.0, green: 235.0 / 255.0, blue: 230.0 / 255.0, alpha: 1.0)
+        }
+        context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+        guard let image = context.makeImage() else { return }
+        let rep = NSBitmapImageRep(cgImage: image)
+        guard let pngData = rep.representation(using: .png, properties: [:]) else { return }
+        try? pngData.write(to: URL(fileURLWithPath: outputPath))
+    }
+
+    private func paperURL(forDarkMode isDark: Bool = false) -> URL {
+        return ensurePaperImage(isDark: isDark)
     }
 
     func run(args: [String]) {
