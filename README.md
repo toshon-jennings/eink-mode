@@ -25,7 +25,7 @@ The CLI does **not** invoke Shortcuts accessibility intents. The optional Shortc
 
 ### Option 1: Homebrew (Recommended)
 
-Install directly via Toshon's tap:
+Install directly via tap:
 
 ```bash
 brew install toshon-jennings/tap/eink
