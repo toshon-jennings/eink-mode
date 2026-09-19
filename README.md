@@ -76,7 +76,7 @@ This immediately updates the macOS appearance and switches between the light pap
 
 Apple's documented API addresses a screen's current desktop image, not an inventory of every desktop Space. This mode captures the wallpaper visible on each connected screen when `on` runs. It cannot promise that a different Space, a disconnected display, a dynamic wallpaper's timing behavior, or the "Show on all Spaces" setting will be restored. If you use different wallpapers on multiple Spaces, test this mode on a non-critical Space before relying on it. Do not switch Spaces or disconnect a screen during the first on/off test. A Settings color preset and the included solid PNG have the same state-restoration issue; using Apple's preset would not remove this boundary.
 
-### 4. Optional: Add to Shell PATH
+### 5. Optional: Add to Shell PATH
 Add the binary to your `~/.zshrc` for direct invocation:
 ```bash
 export PATH="$HOME/eink-mode/bin:$PATH"
