@@ -21,30 +21,68 @@ The CLI does **not** invoke Shortcuts accessibility intents. The optional Shortc
 
 ---
 
+## Installation
+
+### Option 1: Homebrew (Recommended)
+
+Install directly via Toshon's tap:
+
+```bash
+brew install toshon-jennings/tap/eink
+```
+
+### Option 2: Pre-compiled GitHub Release Binary
+
+Download the universal macOS binary (`x86_64` + `arm64`) from the [Latest GitHub Release (v0.1.0)](https://github.com/toshon-jennings/eink-mode/releases/latest):
+
+```bash
+curl -LO https://github.com/toshon-jennings/eink-mode/releases/download/v0.1.0/eink-v0.1.0-macos.tar.gz
+```
+
+```bash
+tar -xzf eink-v0.1.0-macos.tar.gz
+```
+
+```bash
+sudo mv eink-v0.1.0/eink /usr/local/bin/
+```
+
+### Option 3: Build from Source
+
+```bash
+git clone https://github.com/toshon-jennings/eink-mode.git
+```
+
+```bash
+cd eink-mode && make all
+```
+
+---
+
 ## Quick Start
 
-The standalone `eink` binary is located at `~/eink-mode/bin/eink`.
+If installed via Homebrew or in your `PATH`, invoke `eink` directly. If using the local build in this repo, use `~/eink-mode/bin/eink`.
 
 ### 1. Check Current Status
 ```bash
-~/eink-mode/bin/eink status
+eink status
 ```
 
 To check whether wallpaper capture is available without changing anything:
 ```bash
-~/eink-mode/bin/eink wallpaper-check
+eink wallpaper-check
 ```
 
 ### 2. Turn On E-Ink Mode (Light or Dark)
 ```bash
-~/eink-mode/bin/eink on
+eink on
 ```
 Or choose your appearance mode directly upon activation:
 ```bash
-~/eink-mode/bin/eink on dark
+eink on dark
 ```
 ```bash
-~/eink-mode/bin/eink on light
+eink on light
 ```
 - Records the reported appearance, display-filter, motion, and current-Space wallpaper settings in `~/.config/eink-mode/state.json` before requesting changes.
 - In **Light mode** (default): sets Light appearance and warm e-ink paper wallpaper (`eink_paper.png`).
@@ -55,23 +93,23 @@ Or choose your appearance mode directly upon activation:
 ### 3. Change Appearance Mode Immediately While Active
 You can toggle between Dark and Light appearance instantly at any time without leaving E-Ink Mode or clobbering your original baseline:
 ```bash
-~/eink-mode/bin/eink on dark
+eink on dark
 ```
 ```bash
-~/eink-mode/bin/eink on light
+eink on light
 ```
 Or use the direct shorthands:
 ```bash
-~/eink-mode/bin/eink dark
+eink dark
 ```
 ```bash
-~/eink-mode/bin/eink light
+eink light
 ```
 This immediately updates the macOS appearance and switches between the light paper and dark slate wallpapers, while keeping your pre-E-Ink baseline intact.
 
 ### 4. Turn Off E-Ink Mode (Restore Baseline)
 ```bash
-~/eink-mode/bin/eink off
+eink off
 ```
 - Requests restoration of the recorded appearance, accessibility settings, and current-Space wallpapers.
 - Reads back the reported settings and wallpaper URLs/options for connected screens. If restoration cannot be verified, keeps the ledger active so `eink recover` can retry.
@@ -131,11 +169,11 @@ If you ever find your display settings stuck or need an emergency reset:
 
 1. **CLI Recovery**:
    ```bash
-   ~/eink-mode/bin/eink recover
+   eink recover
    ```
    If no active ledger exists, `--force` turns off the controlled accessibility settings; **it does not restore your previous preferences** and may overwrite accessibility choices you made yourself:
    ```bash
-   ~/eink-mode/bin/eink recover --force
+   eink recover --force
    ```
 
 2. **macOS Hardware Shortcut**:
