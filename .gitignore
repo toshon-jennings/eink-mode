@@ -1,5 +1,6 @@
 # Compiled binary
 bin/eink
+dist/
 
 # macOS system files
 .DS_Store
